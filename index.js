@@ -24,7 +24,33 @@ async function main() {
   await lightUp();
 }
 
-board.on("ready", function() {
-  var thing = proximityFunc();
-  console.log(thing);
-});
+function runner() {
+  var dist = '';
+  var count = 0;
+  board.on("ready", function() {
+      try {
+          var proximity = new five.Proximity({
+              controller: "HCSR04",
+              pin: 7
+          });
+  
+          proximity.on("data", function() {
+              console.log("Proximity: ");
+              console.log(this.cm);
+              console.log("  cm  : ", this.cm);
+              console.log("  in  : ", this.in);
+              console.log("-----------------");
+              dist = this.cm;
+              count += 1;
+              if (count === 10)throw dist;
+          });
+      } catch (nastyException){
+          console.log('hit');
+          console.log(nastyException);
+      }   
+  });
+  return dist;
+}
+
+console.log('what is the runner?');
+console.log(runner());
