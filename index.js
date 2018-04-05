@@ -2,6 +2,7 @@ var five = require("johnny-five");
 var board = new five.Board({
   repl: false
 });
+var proximityFunc = require('./motor/poximitycontrol').prox;
 
 function lightUp() {
   let pin9 = new five.Pin(9);
@@ -11,25 +12,6 @@ function lightUp() {
     
     return pin9.low()
   }, 3000);
-}
-
-function proximityFunc() {
-  try {
-    var proximity = new five.Proximity({
-      controller: "HCSR04",
-      pin: 7
-    });
-
-    proximity.on("data", function() {
-      console.log("Proximity: ");
-      console.log("  cm  : ", this.cm);
-      console.log("  in  : ", this.in);
-      console.log("-----------------");
-      throw new Error();
-    });
-  } catch (nastyException){
-    console.log(nastyException)
-  }
 }
 
 function promiseForfiller() {
@@ -43,7 +25,6 @@ async function main() {
 }
 
 board.on("ready", function() {
-  main().then(() => {
-    console.log('done?');
-  });
+  var thing = proximityFunc();
+  console.log(thing);
 });
