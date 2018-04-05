@@ -1,0 +1,20 @@
+{
+  "name": "nodeard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "johnny-five": "^0.14.2",
+    "nodebots-interchange": "^1.1.6",
+    "socket.io": "^2.1.0",
+    "sse": "0.0.8"
+  },
+  "dependencies": {
+    "nodebots-hcsr04": "git+https://github.com/ajfisher/nodebots-hcsr04.git"
+  }
+}
