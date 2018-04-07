@@ -20,19 +20,20 @@ function promiseForfiller() {
   }).then(() => console.log('done'));
 }
 
-async function main() {
-  await lightUp();
-}
+// async function main() {
+//   await lightUp();
+// }
 
 function runner() {
-  var dist = '';
-  var count = 0;
-  board.on("ready", function() {
+  return new Promise((resolve, reject) => {
+    var dist = '';
+    var count = 0;
+    board.on("ready", function() {
       try {
-          var proximity = new five.Proximity({
-              controller: "HCSR04",
-              pin: 7
-          });
+        var proximity = new five.Proximity({
+            controller: "HCSR04",
+            pin: 7
+        });
   
           proximity.on("data", function() {
               console.log("Proximity: ");
@@ -42,15 +43,45 @@ function runner() {
               console.log("-----------------");
               dist = this.cm;
               count += 1;
-              if (count === 10)throw dist;
+              if (count === 10){
+                throw dist;
+              } 
           });
-      } catch (nastyException){
+      } catch (e){
           console.log('hit');
-          console.log(nastyException);
-      }   
-  });
-  return dist;
+          console.log(e);
+          resolve(dist);
+          reject(dist);
+      } finally {
+        resolve(dist);
+        reject(dist);
+      }  
+    });
+  })
+  
 }
 
-console.log('what is the runner?');
-console.log(runner());
+async function main() {
+  console.log('calling some function');
+  var result = await runner();
+  console.log('what is the runner?');
+  console.log(result);
+}
+
+console.log('start');
+// main();
+
+board.on("ready", function() {
+  setTimeout(function(){
+    var proximity = new five.Proximity({
+      controller: "HCSR04",
+      pin: 7
+    });
+  
+    proximity.on("data", function() {
+      console.log("inches: ", this.inches);
+      console.log("cm: ", this.cm);
+    });
+  }, 10000)
+});
+console.log('end');
